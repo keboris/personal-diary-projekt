@@ -10,7 +10,6 @@ const EntriesList = ({ entries, moods, farbe }) => {
   const [modalType, setModalType] = useState(null);
 
   const openDialog = (idEntry) => {
-    console.log("id entry: ", idEntry);
     if (idEntry) {
       showEntry(idEntry);
       setModalType("view");

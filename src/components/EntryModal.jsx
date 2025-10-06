@@ -15,6 +15,7 @@ const EntryModal = ({
     urlImg: "",
     content: "",
     mood: "",
+    date: "",
   });
 
   const farbe = ["neutral", "success", "accent", "info", "error", "warning"];
@@ -27,6 +28,7 @@ const EntryModal = ({
         urlImg: entryState.selectedEntry.urlImg,
         content: entryState.selectedEntry.content,
         mood: entryState.selectedEntry.mood,
+        date: entryState.selectedEntry.date,
       });
     }
   }, [isOpen, entryState.selectedEntry]);
@@ -40,14 +42,14 @@ const EntryModal = ({
   const handleSave = (e) => {
     e.preventDefault();
 
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const dateStr = new Date(formData.date).toISOString().slice(0, 10);
     const titleNormalized = formData.title.trim().toLowerCase();
     const imgNormalized = formData.urlImg.trim();
 
     const list = entryState.entries.filter((e) => e.id !== formData.id);
     const hasDuplicate = list.some((entry) => {
       const entryDateStr = new Date(entry.date).toISOString().slice(0, 10);
-      if (entryDateStr !== todayStr) return false;
+      if (entryDateStr !== dateStr) return false;
 
       const entryTitle = (entry.title || "").trim().toLowerCase();
       const entryImg = (entry.urlImg || "").trim();
@@ -112,15 +114,15 @@ const EntryModal = ({
                         })}
                       </span>
                     </p>
-                    <div
+                    {/*<div
                       className={`badge badge-sm badge-${
                         farbe[entryState.selectedEntry.mood] || "neutral"
                       }`}
                     >
                       Your Mood :{" "}
                       {moods[entryState.selectedEntry.mood] || "None 😶"}
-                    </div>
-                    <h2 className="pt-4 card-title">Description :</h2>
+                    </div>*/}
+                    <h2 className="card-title">Description :</h2>
                     <p className="whitespace-pre-wrap">
                       {entryState.selectedEntry.content}
                     </p>
@@ -185,6 +187,20 @@ const EntryModal = ({
 
                   <div>
                     <label className="block text-sm font-semibold mb-2">
+                      Date
+                    </label>
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date ? formData.date.slice(0, 10) : ""}
+                      onChange={handleChange}
+                      className="input input-bordered w-full"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
                       Image URL
                     </label>
                     <input
@@ -198,7 +214,7 @@ const EntryModal = ({
                     />
                   </div>
 
-                  <div>
+                  <div className="hidden">
                     <label className="block text-sm font-medium text-base-content/70 mb-2">
                       Mood of the day
                     </label>

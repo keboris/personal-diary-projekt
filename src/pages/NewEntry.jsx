@@ -7,6 +7,9 @@ const NewEntry = () => {
   const [mood, setMood] = useState("");
   const [content, setContent] = useState("");
   const [urlImg, setUrlImg] = useState("");
+  const [dateEntry, setDateEntry] = useState(
+    new Date().toISOString().slice(0, 10)
+  );
 
   const { addEntry } = useEntry();
 
@@ -23,15 +26,16 @@ const NewEntry = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const fullDate = dateEntry ? new Date(dateEntry) : new Date();
     const localS = JSON.parse(localStorage.getItem("entries")) ?? [];
 
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const dateStr = new Date(dateEntry).toISOString().slice(0, 10);
     const titleNormalized = title.trim().toLowerCase();
     const imgNormalized = urlImg.trim();
 
     const hasDuplicate = localS.some((entry) => {
       const entryDateStr = new Date(entry.date).toISOString().slice(0, 10);
-      if (entryDateStr !== todayStr) return false;
+      if (entryDateStr !== dateStr) return false;
 
       const entryTitle = (entry.title || "").trim().toLowerCase();
       const entryImg = (entry.urlImg || "").trim();
@@ -56,7 +60,7 @@ const NewEntry = () => {
       urlImg,
       mood,
       content,
-      date: new Date().toISOString(),
+      date: fullDate.toISOString(),
     };
 
     localStorage.setItem("entries", JSON.stringify([newEntry, ...localS]));
@@ -65,6 +69,7 @@ const NewEntry = () => {
     setMood("");
     setContent("");
     setUrlImg("");
+    setDateEntry(new Date().toISOString().slice(0, 10));
     addEntry();
     alert("✅ Your entry has been successfully saved.");
     navigate("/entries");
@@ -94,6 +99,18 @@ const NewEntry = () => {
           </div>
 
           <div>
+            <label className="block text-sm font-semibold mb-2">Date</label>
+            <input
+              type="date"
+              name="date"
+              value={dateEntry}
+              onChange={(e) => setDateEntry(e.target.value)}
+              className="input input-bordered w-full"
+              required
+            />
+          </div>
+
+          <div>
             <label className="block text-sm font-semibold mb-2">
               Image URL
             </label>
@@ -107,7 +124,7 @@ const NewEntry = () => {
             />
           </div>
 
-          <div>
+          <div className="hidden">
             <label className="block text-sm font-medium text-base-content/70 mb-2">
               Mood of the day
             </label>
