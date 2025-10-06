@@ -26,7 +26,7 @@ const About = () => {
 
         <div className="divider"></div>
 
-        <h3 className="text-2xl font-semibold">🛠️ Technologies utilisées</h3>
+        <h3 className="text-2xl font-semibold">🛠️ Technologies used</h3>
         <ul className="list-none space-y-2 text-base-content/80">
           <li>
             ⚛️ <strong>React</strong> — for a fluid and modern interface

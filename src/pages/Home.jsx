@@ -1,9 +1,21 @@
 import { Link } from "react-router";
 import { useEntry } from "../contexts/EntryContext";
+import NewEntryModal from "../components/NewEntryModal";
+import { useState } from "react";
 
 const Home = () => {
   const entries = JSON.parse(localStorage.getItem("entries")) ?? [];
   const totalE = entries.length;
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openDialog = () => {
+    setIsOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -22,9 +34,15 @@ const Home = () => {
             <Link to="/entries" className="btn btn-primary btn-wide">
               See my Entries ({totalE})
             </Link>
-            <Link to="/new" className="btn btn-outline btn-secondary btn-wide">
+            {/*<Link to="/new" className="btn btn-outline btn-secondary btn-wide">
               New Entry
-            </Link>
+            </Link>*/}
+            <button
+              className="btn btn-outline btn-secondary btn-wide"
+              onClick={() => openDialog()}
+            >
+              New Entry
+            </button>
           </div>
         </div>
       </section>
@@ -47,6 +65,8 @@ const Home = () => {
           <span className="text-6xl">🪶</span>
         </div>
       </section>
+
+      <NewEntryModal isOpen={isOpen} onClose={closeDialog} />
     </>
   );
 };

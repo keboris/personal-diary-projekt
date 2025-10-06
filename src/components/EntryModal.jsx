@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { createPath } from "react-router";
 
 const EntryModal = ({
   moods,

@@ -2,18 +2,25 @@ import { Link } from "react-router";
 import { useEntry } from "../contexts/EntryContext";
 import { useState } from "react";
 import EntryModal from "./EntryModal";
+import NewEntryModal from "./NewEntryModal";
 
 const EntriesList = ({ entries, moods, farbe }) => {
   const { entryState, showEntry, editEntry, deleteEntry } = useEntry();
   const [isOpen, setIsOpen] = useState(false);
+  const [modalType, setModalType] = useState(null);
 
   const openDialog = (idEntry) => {
-    showEntry(idEntry);
+    if (idEntry) {
+      showEntry(idEntry);
+      setModalType("view");
+    } else setModalType("new");
+
     setIsOpen(true);
   };
 
   const closeDialog = () => {
     setIsOpen(false);
+    setModalType(null);
   };
 
   return (
@@ -21,9 +28,12 @@ const EntriesList = ({ entries, moods, farbe }) => {
       {entries.length === 0 ? (
         <div className="text-center text-base-content/70 mt-20">
           <p>No entries yet.</p>
-          <Link to="/new" className="btn btn-sm btn-secondary mt-4">
+          <button
+            className="btn btn-sm btn-secondary mt-4"
+            onClick={() => openDialog()}
+          >
             Create a new Entry
-          </Link>
+          </button>
         </div>
       ) : (
         <div className="grid md:grid-cols-3 gap-6">
@@ -95,14 +105,21 @@ const EntriesList = ({ entries, moods, farbe }) => {
           ))}
         </div>
       )}
-      <EntryModal
-        moods={moods}
-        isOpen={isOpen}
-        entryState={entryState}
-        onClose={closeDialog}
-        editEntry={editEntry}
-        deleteEntry={deleteEntry}
-      />
+
+      {modalType === "view" && (
+        <EntryModal
+          moods={moods}
+          isOpen={isOpen}
+          entryState={entryState}
+          onClose={closeDialog}
+          editEntry={editEntry}
+          deleteEntry={deleteEntry}
+        />
+      )}
+
+      {modalType === "view" && (
+        <NewEntryModal isOpen={isOpen} onClose={closeDialog} />
+      )}
     </>
   );
 };
