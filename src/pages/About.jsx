@@ -10,19 +10,18 @@ const About = () => {
           </div>
         </div>
 
-        <h2 className="text-4xl font-bold text-primary">À propos du projet</h2>
+        <h2 className="text-4xl font-bold text-primary">About the project</h2>
 
         <p className="text-base md:text-lg text-base-content/80 leading-relaxed">
-          <strong>Mon Journal Personnel</strong> est une application conçue pour
-          t’offrir un espace intime, simple et moderne pour écrire, réfléchir et
-          garder une trace de ton parcours.
+          <strong>My Personal Diary</strong> s an app designed to offer you a
+          private, simple, and modern space to write, reflect, and keep track of
+          your journey.
         </p>
 
         <p className="text-base md:text-lg text-base-content/70 leading-relaxed">
-          Ce projet a été imaginé par <strong>Boris Ket</strong> — développeur,
-          créatif et passionné par la technologie et la musique 🎶. L’objectif :
-          permettre à chacun de capturer ses pensées, émotions et souvenirs dans
-          un environnement apaisant et élégant.
+          This project was developed by <strong>Boris Ket</strong>
+          <br />. The goal: to allow everyone to capture their thoughts,
+          emotions, and memories in a calming and elegant environment.
         </p>
 
         <div className="divider"></div>
@@ -30,32 +29,31 @@ const About = () => {
         <h3 className="text-2xl font-semibold">🛠️ Technologies utilisées</h3>
         <ul className="list-none space-y-2 text-base-content/80">
           <li>
-            ⚛️ <strong>React</strong> — pour une interface fluide et moderne
+            ⚛️ <strong>React</strong> — for a fluid and modern interface
           </li>
           <li>
-            🎨 <strong>DaisyUI + TailwindCSS</strong> — pour le style et la
-            cohérence visuelle
+            🎨 <strong>DaisyUI + TailwindCSS</strong> — for style and visual
+            consistency
           </li>
           <li>
-            💾 <strong>LocalStorage</strong> — pour sauvegarder les entrées
-            localement
+            💾 <strong>LocalStorage</strong> — to save entries locally
           </li>
         </ul>
 
         <div className="divider"></div>
 
         <p className="text-base md:text-lg text-base-content/70 leading-relaxed">
-          Ce journal est plus qu’une application : c’est un compagnon personnel,
-          un confident numérique, et un outil pour mieux te connaître jour après
-          jour.
+          This journal is more than an app: it's a personal companion, a digital
+          confidant, and a tool to help you get to know yourself better day
+          after day.
         </p>
 
         <div className="flex justify-center gap-4 pt-6">
           <Link to="/" className="btn btn-outline btn-secondary">
-            ← Retour à l’accueil
+            ← Back to Home
           </Link>
           <Link to="/entries" className="btn btn-primary">
-            Voir mes entrées
+            See my Entries
           </Link>
         </div>
       </section>
