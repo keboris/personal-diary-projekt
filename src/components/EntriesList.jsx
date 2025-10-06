@@ -8,6 +8,7 @@ const EntriesList = ({ entries, moods, farbe }) => {
   const { entryState, showEntry, editEntry, deleteEntry } = useEntry();
   const [isOpen, setIsOpen] = useState(false);
   const [modalType, setModalType] = useState(null);
+  const [filterDate, setFilterDate] = useState("");
 
   const openDialog = (idEntry) => {
     if (idEntry) {
@@ -23,7 +24,14 @@ const EntriesList = ({ entries, moods, farbe }) => {
     setModalType(null);
   };
 
-  const sortedEntries = [...entries].sort((a, b) => {
+  const filteredEntries = filterDate
+    ? entries.filter((entry) => {
+        const entryDateStr = new Date(entry.date).toISOString().slice(0, 10);
+        return entryDateStr === filterDate;
+      })
+    : entries;
+
+  const sortedEntries = [...filteredEntries].sort((a, b) => {
     const dateA = new Date(a.date);
     const dateB = new Date(b.date);
     return dateB - dateA;
@@ -42,74 +50,94 @@ const EntriesList = ({ entries, moods, farbe }) => {
           </button>
         </div>
       ) : (
-        <div className="grid md:grid-cols-3 gap-6">
-          {sortedEntries.map((entry) => (
-            <div
-              key={entry.id}
-              className="card bg-base-100 cursor-pointer rounded-xl shadow-sm hover:shadow-lg transition-shadow flex flex-col justify-between"
-            >
-              <div
-                className="cursor-pointer"
-                onClick={() => openDialog(entry.id)}
-              >
-                <figure className="w-full overflow-hidden rounded-lg">
-                  <img
-                    src={entry.urlImg}
-                    alt={entry.title}
-                    className="w-full h-42 object-cover"
-                  />
-                </figure>
+        <>
+          <div className="mb-4 flex items-center gap-2">
+            <label className="input font-semibold">
+              <span>Filter by date :</span>
+              <input
+                type="date"
+                value={filterDate}
+                onChange={(e) => setFilterDate(e.target.value)}
+              />
+            </label>
 
-                <div className="card-body">
-                  <h3 className="text-xl font-semibold card-title">
-                    {entry.title}
-                  </h3>
-                  <p className="text-sm text-base-content/70 mb-2">
-                    📅{" "}
-                    {new Date(entry.date).toLocaleDateString("de-DE", {
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </p>
-                  <p className="text-base-content/80 line-clamp-3 mb-2">
-                    {entry.content}
-                  </p>
-                  {/*<div
+            <button
+              className="btn btn-sm btn-ghost"
+              onClick={() => setFilterDate("")}
+            >
+              Delete
+            </button>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {sortedEntries.map((entry) => (
+              <div
+                key={entry.id}
+                className="card bg-base-100 cursor-pointer rounded-xl shadow-sm hover:shadow-lg transition-shadow flex flex-col justify-between"
+              >
+                <div
+                  className="cursor-pointer"
+                  onClick={() => openDialog(entry.id)}
+                >
+                  <figure className="w-full overflow-hidden rounded-lg">
+                    <img
+                      src={entry.urlImg}
+                      alt={entry.title}
+                      className="w-full h-42 object-cover"
+                    />
+                  </figure>
+
+                  <div className="card-body">
+                    <h3 className="text-xl font-semibold card-title">
+                      {entry.title}
+                    </h3>
+                    <p className="text-sm text-base-content/70 mb-2">
+                      📅{" "}
+                      {new Date(entry.date).toLocaleDateString("de-DE", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
+                    <p className="text-base-content/80 line-clamp-3 mb-2">
+                      {entry.content}
+                    </p>
+                    {/*<div
                     className={`badge badge-sm badge-${
                       farbe[entry.mood] || "neutral"
                     }`}
                   >
                     Mood : {moods[entry.mood] || "None 😶"}
                   </div>*/}
+                  </div>
+                </div>
+                <div className="card-actions px-6 pb-6 justify-between">
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={() => openDialog(entry.id)}
+                  >
+                    Show More
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Es-tu sûr de vouloir supprimer cette entrée ?"
+                        )
+                      ) {
+                        deleteEntry(entry.id);
+                      }
+                    }}
+                    className="btn btn-sm btn-outline btn-error"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
-              <div className="card-actions px-6 pb-6 justify-between">
-                <button
-                  className="btn btn-sm btn-primary"
-                  onClick={() => openDialog(entry.id)}
-                >
-                  Show More
-                </button>
-
-                <button
-                  onClick={() => {
-                    if (
-                      window.confirm(
-                        "Es-tu sûr de vouloir supprimer cette entrée ?"
-                      )
-                    ) {
-                      deleteEntry(entry.id);
-                    }
-                  }}
-                  className="btn btn-sm btn-outline btn-error"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </>
       )}
 
       {modalType === "view" && (
