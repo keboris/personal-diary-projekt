@@ -23,6 +23,12 @@ const EntriesList = ({ entries, moods, farbe }) => {
     setModalType(null);
   };
 
+  const sortedEntries = [...entries].sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB - dateA;
+  });
+
   return (
     <>
       {entries.length === 0 ? (
@@ -37,7 +43,7 @@ const EntriesList = ({ entries, moods, farbe }) => {
         </div>
       ) : (
         <div className="grid md:grid-cols-3 gap-6">
-          {entries.map((entry) => (
+          {sortedEntries.map((entry) => (
             <div
               key={entry.id}
               className="card bg-base-100 cursor-pointer rounded-xl shadow-sm hover:shadow-lg transition-shadow flex flex-col justify-between"
